@@ -77,18 +77,30 @@ def add():
     return render_template("task.html", **kwargs)
 
 
-@app.route("/update/<int:todo_id>")
-def update(todo_id):
-    todo = Task.query.filter_by(id=todo_id).first()
-    todo.complete = not todo.complete
+@app.route("/update/<int:task_id>")
+def update(task_id):
+    task = Task.query.filter_by(id=task_id).first()
+
+    # Check
+    if not task.complete:
+        tasks_with_same_cat = Task.query.filter_by(cat_id=task.categories.id).order_by(Task.id)
+        for t in tasks_with_same_cat:
+            if t.id >= task.id:
+                break
+
+            if not t.complete:
+                flash("Finish previous tasks in this category to mark as complete.")
+                return redirect(url_for("home"))
+
+    task.complete = not task.complete
     db.session.commit()
     return redirect(url_for("home"))
 
 
-@app.route("/delete/<int:todo_id>")
-def delete(todo_id):
-    todo = Task.query.filter_by(id=todo_id).first()
-    db.session.delete(todo)
+@app.route("/delete/<int:task_id>")
+def delete(task_id):
+    task = Task.query.filter_by(id=task_id).first()
+    db.session.delete(task)
     db.session.commit()
     return redirect(url_for("home"))
 
