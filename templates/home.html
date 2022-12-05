@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+
+{% block dt_title %}Task List{% endblock %}
+
+{% block main %}
+<div class="ui">
+  <a href="{{ url_for('add') }}"><button class="ui blue button">New Task</button></a>
+</div>
+
+<hr>
+
+{% for task in task_list %}
+<div class="ui segment">
+  <p class="ui big header">
+    {{ task.title }} <span class="ui black label">{{ task.categories.name }}</span>
+    {% if task.complete == False %}
+    <span class="ui gray label">Pending</span>
+    {% else %}
+    <span class="ui green label">Completed</span>
+    {% endif %}
+  </p>
+
+  <a class="ui blue button" href="/update/{{ task.id }}">{% if task.complete == False %}Mark as Complete{% else %}Unmark as Complete{% endif %}</a>
+  <a class="ui red button" href="/delete/{{ task.id }}">Delete</a>
+</div>
+{% endfor %}
+{% endblock %}
+

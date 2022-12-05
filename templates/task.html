@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+
+{% block dt_title %}Add New Task{% endblock %}
+
+{% block main %}
+<div class="ui">
+  <a href="{{ url_for('home') }}"><button class="ui blue button">Task List</button></a>
+</div>
+
+<hr>
+
+<form class="ui form segment" action="" method="post">
+  <div class="field">
+    <label>Title</label>
+    <input type="text" name="title" placeholder="Enter Title..." value="{{ title }}" required><br>
+  </div>
+  <div class="field">
+    <label>Category</label>
+    <select name="category" id="category" required>
+      <option value="--new-category--" selected>-- Create New Category --</option>
+      {% for cat in categories %}
+      <option value="{{ cat.name }}">{{ cat.name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="field" id="new-category-div">
+    <label>New Category</label>
+    <input type="text" name="new_category_name" placeholder="Enter Category Name..."><br>
+  </div>
+  <button class="ui blue button" type="submit">Add</button>
+</form>
+{% endblock %}
+
+{% block body_end_script %}
+<script type="text/javascript">
+  var categorySelect = document.querySelector("#category");
+  var newCategoryDiv = document.querySelector("#new-category-div");
+  var NEW_CAT_DISPLAY = newCategoryDiv.style.display;
+
+  if (categorySelect.selectedIndex == "0") {
+    newCategoryDiv.style.display = NEW_CAT_DISPLAY;
+  } else {
+    newCategoryDiv.style.display = "none";
+  }
+
+  (function() {
+    'use strict';
+    categorySelect.addEventListener('change', function(event) {
+      event.preventDefault();
+
+      if (categorySelect.selectedIndex == "0") {
+        newCategoryDiv.style.display = NEW_CAT_DISPLAY;
+      } else {
+        newCategoryDiv.style.display = "none";
+      }
+    });
+  })()
+</script>
+{% endblock %}
+
