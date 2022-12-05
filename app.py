@@ -92,6 +92,16 @@ def update(task_id):
                 flash("Finish previous tasks in this category to mark as complete.")
                 return redirect(url_for("home"))
 
+    elif task.complete:
+        tasks_with_same_cat = Task.query.filter_by(cat_id=task.categories.id).order_by(Task.id)[::-1]
+        for t in tasks_with_same_cat:
+            if t.id <= task.id:
+                break
+
+            if t.complete:
+                flash("Unmark newer tasks in this category to unmark as complete.")
+                return redirect(url_for("home"))
+
     task.complete = not task.complete
     db.session.commit()
     return redirect(url_for("home"))

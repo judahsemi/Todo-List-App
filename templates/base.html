@@ -15,14 +15,12 @@
   <main style="margin-top: 50px; margin-bottom: 50px;" class="ui container">
     <h1 class="ui center aligned header">{% block dt_title %}{% endblock %}</h1>
 
-    <section>
+    <section class="ui">
       {% with messages = get_flashed_messages() %}
       {% if messages %}
-      <ul class="flashes">
       {% for msg in messages %}
-        <li>{{ msg }}</li>
+        <div class="ui orange label" style="width: 100%; margin-bottom: 8px">{{ msg }}</div>
       {% endfor %}
-      </ul>
       {% endif %}
       {% endwith %}
     </section>
